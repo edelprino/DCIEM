@@ -42,7 +42,7 @@ PROGRAM DCIEM_MAIN
     WRITE (7,109)
 109 FORMAT('TOTAL DIVE',5X, 'ACTUAL',6X,'ALTITUDE',6X,'SAFE ASCENT DEPTHS (FT OF SEAWATER)',/ &
     'TIME (MIN)',5X,'DEPTH (FT)',2X,'(1000 FT)',6X,'1',8X,'2',8X,'3',8X,'4'/)
-    DTI=DTL * .1
+    DTI=DTL*.1
 
 ! INITIAL TIME AND PRESSURES
 
@@ -195,8 +195,8 @@ PROGRAM DCIEM_MAIN
     F(5)=0.
     X=PI
     DO 401 I=1,4
-        Y=P(I)
-        GO TO 450 
+    Y=P(I)
+    GO TO 450 
 401 CONTINUE
     GO TO 500
 402 IF (C) X=X+AK(1,K)*.5
@@ -206,27 +206,26 @@ PROGRAM DCIEM_MAIN
 403 CONTINUE
     GO TO 500
 404 IF (C) X=X+Z1*AK(1,K)+Z2*AK(2,K) 
-    DO I=1,4 
-        Y=P(I)+Z1*AK(1,I)+Z2*AK(2,I)
-        GO TO 450
-    END DO
-405 GO TO 500
+    DO 405 I=1,4 
+    Y=P(I)+Z1*AK(1,I)+Z2*AK(2,I)
+    GO TO 450
+405 CONTINUE
+    GO TO 500
 406 IF (C) X=X-Z3*AK(2,K)+Z4*AK(3,K)
-    DO I=1,4 
-        Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I) 
-        GO TO 450
-    END DO
-407 GO TO 500
-408 DO I=1,4 
-        P(I)=P(I)+(AK(1,I)+Z5*AK(2,I)+Z6*AK(3,I)+AK(4,I))/6.
-    END DO
+    DO 407 I=1,4 
+    Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I) 
+    GO TO 450
+407 CONTINUE
+    GO TO 500
+408 DO 409 I=1,4 
+409 P(I)=P(I)+(AK(1,I)+Z5*AK(2,I)+Z6*AK(3,I)+AK(4,I))/6.
     GO TO 22 
-450 F(I)=A*(X-Y)*(B+X+Y) 
+450 CONTINUE
+    F(I)=A*(X-Y)*(B+X+Y) 
     X=Y
     GO TO (401,403,405,407),J 
-500 DO I=1,4 
-        AK(J,I)=(F(I)-F(I+1))*DT
-    END DO
+500 DO 501 I=1,4 
+501 AK(J,I)=(F(I)-F(I+1))*DT
     X=P1
     J= J + 1
     GO TO (10,402,404,406,408),J 
