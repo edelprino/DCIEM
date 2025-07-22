@@ -2,6 +2,7 @@ compile:
 	gfortran -ffree-form src/main.f90
 
 run:
+	rm -f a.out || true
 	make compile 
 	rm NLDIV.LST || true
 	./a.out || true
