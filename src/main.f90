@@ -189,10 +189,54 @@ PROGRAM DCIEM_MAIN
 115 FORMAT (1H+,25X,F5.2)
 44  GO TO (11,32,33,10,25),NS3
 
+! RUNGE-KUTTA ROUTINE
+10  J=I
+    F(5)=0.
+    X=PI
+    DO I=1,4
+        Y=P(I)
+        GO TO 450 
+    END DO
+401 CONTINUE
+    GO TO 500
+402 IF (C) X=X+AK(1,K)*.5
+    DO I=1,4
+        Y=P(I)+AK(1,I)*.5 
+        GO TO 450
+    END DO
+403 CONTINUE
+    GO TO 500
+404 IF (C) X=X+Z1*AK(1,K)+Z2*AK(2,K) 
+    DO I=1,4 
+        Y=P(I)+Z1*AK(1,I)+Z2*AK(2,I)
+        GO TO 450
+    END DO
+405 CONTINUE
+    GO TO 500
+406 IF (C) X=X-Z3*AK(2,K)+Z4*AK(3,K)
+    DO I=1,4 
+        Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I) 
+        GO TO 450
+    END DO
+407 CONTINUE 
+    GO TO 500
+
+408 DO I=1,4 
+        P(I)=P(I)+(AK(1,I)+Z5*AK(2,I)+Z6*AK(3,I)+AK(4,I))/6.
+    END DO
+    GO TO 22 
+450 F(I)=A*(X-Y)*(B+X+Y) 
+    X=Y
+    GO TO (401,405,405,407),J 
+500 DO I=1,4 
+        AK(J,I)=(F(I)-F(I+1))*DT
+    END DO
+    X=P1
+    J=R
+    GO TO (10,402,404,406,408),J 
 
 
 
-10 CONTINUE ! PLACEHOLDER
 1 CONTINUE ! PLACEHOLDER
 12 CONTINUE ! PLACEHOLDER
 57  CONTINUE ! PLACEHOLDER
