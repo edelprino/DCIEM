@@ -1,5 +1,5 @@
 compile:
-	gfortran -ffree-form src/main.f90
+	gfortran -ffree-form -std=legacy src/main.f90
 
 run:
 	rm -f a.out || true
