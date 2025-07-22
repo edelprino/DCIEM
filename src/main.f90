@@ -79,7 +79,7 @@ PROGRAM DCIEM_MAIN
     TL = T - .01 
     IF (KEY.EQ.4) GO TO 59 
     DP = .1+RDES 
-    W2 = GI + 33. - DP ! GI da controllare (non si capisce bene da pdf)
+    W2 = GI + 33. - DP 
 56  IF (PI.LT.W2) GO TO 58 
 59  P1 = GI+33. 
     NS = 5 
