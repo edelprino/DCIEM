@@ -193,7 +193,7 @@ PROGRAM DCIEM_MAIN
 
 ! RUNGE-KUTTA ROUTINE
 
-10  J=I
+10  J=1
     F(5)=0.
     X=PI
     DO I=1,4
