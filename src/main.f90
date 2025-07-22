@@ -69,6 +69,31 @@ PROGRAM DCIEM_MAIN
 25  PMIN = 0.
     KPT = 0
 
+! READ IN STEP TIME AND PRESSURES
+
+11  DT = DTL 
+    PLAST = PI 
+    READ (3,104) T, GI 
+    IF (T.LT.0.) GO TO 12 
+    IF(NS2.EQ.2) T=T+TT 
+    NS2 = 1
+    TL = T - .01 
+    IF (KEY.EQ.4) GO TO 59 
+    DP = .1+RDES 
+    W2 = GI + 33. - DP ! GI da controllare (non si capisce bene da pdf)
+56  IF (PI.LT.W2) GO TO 58 
+59  P1 = GI+33. 
+    NS = 5 
+    GO TO 57 
+58  DT=0.1 
+    NS=1 
+    P1 = P1+DP
+
+
+
+
+12 CONTINUE ! PLACEHOLDER
+57  CONTINUE ! PLACEHOLDER
 30  CONTINUE  ! DA RIMUOVERE, SOLO PER COMPILARE TEMPORANEAMENTE, AGGGIUNTA IO
 
 END PROGRAM DCIEM_MAIN
