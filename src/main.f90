@@ -225,7 +225,7 @@ PROGRAM DCIEM_MAIN
     GO TO 22 
 450 F(I)=A*(X-Y)*(B+X+Y) 
     X=Y
-    GO TO (401,405,405,407),J 
+    GO TO (401,403,405,407),J 
 500 DO I=1,4 
         AK(J,I)=(F(I)-F(I+1))*DT
     END DO
