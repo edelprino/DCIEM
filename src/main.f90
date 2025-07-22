@@ -200,29 +200,25 @@ PROGRAM DCIEM_MAIN
         Y=P(I)
         GO TO 450 
     END DO
-401 CONTINUE
-    GO TO 500
+401 GO TO 500
 402 IF (C) X=X+AK(1,K)*.5
     DO I=1,4
         Y=P(I)+AK(1,I)*.5 
         GO TO 450
     END DO
-403 CONTINUE
-    GO TO 500
+403 GO TO 500
 404 IF (C) X=X+Z1*AK(1,K)+Z2*AK(2,K) 
     DO I=1,4 
         Y=P(I)+Z1*AK(1,I)+Z2*AK(2,I)
         GO TO 450
     END DO
-405 CONTINUE
-    GO TO 500
+405 GO TO 500
 406 IF (C) X=X-Z3*AK(2,K)+Z4*AK(3,K)
     DO I=1,4 
         Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I) 
         GO TO 450
     END DO
-407 CONTINUE 
-    GO TO 500
+407 GO TO 500
 408 DO I=1,4 
         P(I)=P(I)+(AK(1,I)+Z5*AK(2,I)+Z6*AK(3,I)+AK(4,I))/6.
     END DO
