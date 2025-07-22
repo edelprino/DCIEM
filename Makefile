@@ -3,4 +3,6 @@ compile:
 
 run:
 	make compile 
-	./a.out
+	rm NLDIV.LST || true
+	./a.out || true
+	cat NLDIV.LST
