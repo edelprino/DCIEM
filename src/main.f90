@@ -16,18 +16,18 @@ PROGRAM DCIEM_MAIN
         WRITE(*,*) 'Error opening input file'
         STOP
     END IF
-    
+
     OPEN(UNIT=7, FILE='NLDIV.LST', STATUS='REPLACE')
-    
+
 1   READ (3,101) KEY, TITL
 101 FORMAT (I2, 14A5)
-    IF (KEY.NE.9) GO TO 2 
+    IF (KEY.NE.9) GO TO 2
     CLOSE(3)
     CLOSE(7)
     STOP
 
 2   WRITE (7,102) TITL
-102 FORMAT (14A5)
+102 FORMAT (1H1, 14A5)
     READ(3,103) A,B,R
 103 FORMAT(E8.4,F5.1,F5.3)
     READ(3,112) DTL,TMAX,PTOUT,RDES,RASC
@@ -50,15 +50,14 @@ PROGRAM DCIEM_MAIN
 104 FORMAT(6F5.1)
     K = 1
     FOUND = G(1).EQ.0.
-    DO I=1,4
-        IF (FOUND) G(I) = G1
-        P(I) = G(I) + 33.
-        W = P(I)/R - 42.9
-        GBIG(I) = W
-        IF (GBIG(K).LT.W) K = I
-    END DO
+    DO 7 I=1,4
+    IF (FOUND) G(I) = G1
+    P(I) = G(I) + 33.
+    W = P(I)/R - 42.9
+    GBIG(I) = W
+7   IF (GBIG(K).LT.W) K = I
 
-    PI = G1 + 33.
+    P1 = G1 + 33.
     PBIGK=GBIG(K) + 33.
     TT = T
     C = .FALSE.
@@ -70,56 +69,56 @@ PROGRAM DCIEM_MAIN
 
 ! READ IN STEP TIME AND PRESSURES
 
-11  DT = DTL 
-    PLAST = PI 
-    READ (3,104) T, GI 
-    IF (T.LT.0.) GO TO 12 
-    IF(NS2.EQ.2) T=T+TT 
+11  DT = DTL
+    PLAST = PI
+    READ (3,104) T, GI
+    IF (T.LT.0.) GO TO 12
+    IF(NS2.EQ.2) T=T+TT
     NS2 = 1
-    TL = T - .01 
-    IF (KEY.EQ.4) GO TO 59 
-    DP = .1+RDES 
-    W2 = GI + 33. - DP 
-56  IF (PI.LT.W2) GO TO 58 
-59  P1 = GI+33. 
-    NS = 5 
-    GO TO 57 
-58  DT=0.1 
-    NS=1 
+    TL = T - .01
+    IF (KEY.EQ.4) GO TO 59
+    DP = .1+RDES
+    W2 = GI + 33. - DP
+56  IF (PI.LT.W2) GO TO 58
+59  P1 = GI+33.
+    NS = 5
+    GO TO 57
+58  DT=0.1
+    NS=1
     P1 = P1+DP
 
 ! TEST FOR DESCENT PRESSURE AND TIME CHANGES
 
-57  IF (PI.NE.PLAST) DT=DT1 
-19  IF (TT.LT.TL) GO TO 10 
-    IF((TTEST.LT..05).OR.(TTEST.GT.(PTOUT-.05)))GO TO 11 
-43  NS3=1 
+57  IF (PI.NE.PLAST) DT=DTI
+19  IF (TT.LT.TL) GO TO 10
+    IF((TTEST.LT..05).OR.(TTEST.GT.(PTOUT-.05)))GO TO 11
+43  NS3=1
     GO TO 30
 
 ! PART OF RUNGE-KUTTA ROUTINE
 
-22  DO I = 1,4 
-        W = P(I)/R-42.9 
+22  DO I = 1,4
+        W = P(I)/R-42.9
         GBIG(I) = W
-        IF (GBIG(K).LT.W) K = I 
+        IF (GBIG(K).LT.W) K = I
     END DO
-    PBIGK=GBIG(K)+ 33. 
-    TT = TT + DT 
-    TTEST = AMOD (TT,PTOUT) 
-    W= .5*DT 
-    IF((TTEST.GT.W).AND.(TTEST.LE.(PTOUT-W))) GO TO 32 
-    IF (KPT.EQ.I) DT=DTL 
+    PBIGK=GBIG(K)+ 33.
+    TT = TT + DT
+    TTEST = AMOD (TT,PTOUT)
+    W= .5*DT
+    IF((TTEST.GT.W).AND.(TTEST.LE.(PTOUT-W))) GO TO 32
+    IF (KPT.EQ.I) DT=DTL
     NS3=2
-77  GO TO 30 
-32  IF((PBIGK.GT.PMIN).AND.(TT.LT.TMAX1))GO TO (56,10,18,17,57),NS 
-    NS3=3 
+77  GO TO 30
+32  IF((PBIGK.GT.PMIN).AND.(TT.LT.TMAX1))GO TO (56,10,18,17,57),NS
+    NS3=3
     GO TO 30
 
 ! TESTS FOR REPETITIVE AND FLYING AFTER DIVING
 
 33  IF (KEY.GE.10) GO TO (23,26),NS2
     IF (KEY.EQ.5) GO TO 20
-    GO TO 1 
+    GO TO 1
 
 12  PMIN = 33.
 
@@ -144,13 +143,13 @@ PROGRAM DCIEM_MAIN
 
 ! CONTINUOUS CONTROLLED ASCENT
 
-    C = .TRUE. 
+    C = .TRUE.
     KPT = 1
     NS=4
-    NS3=NS 
-    PI = PBIGK 
-    GO TO 30 
-17  PI = PBIGK 
+    NS3=NS
+    PI = PBIGK
+    GO TO 30
+17  PI = PBIGK
     GO TO 10
 
 ! FLYING AFTFR DIVING ROUTINE
@@ -162,28 +161,28 @@ PROGRAM DCIEM_MAIN
 
 ! REPETITIVE DIVING ROUTINE - SURFACE INTERVAL W IS TIME AT SURFACE
 
-23  READ (3,105) W 
-105 FORMAT (F5.1) 
-    TMAX1 = TT + W 
+23  READ (3,105) W
+105 FORMAT (F5.1)
+    TMAX1 = TT + W
     NS2 = 2
-41  PMIN = 0. 
+41  PMIN = 0.
     GO TO 21
 
 ! DESCEND AND DIVE REPETITION
 
-26  TMAX1 = TMAX 
-    KEY = KEY - 10 
+26  TMAX1 = TMAX
+    KEY = KEY - 10
     GO TO 25
 
 ! OUTPUT PRINT ROUTINE
 
 30  W=PBIGK
-    IF ((KEY.EQ.4).OR.(T.GE.0.).OR.(.NOT.C)) W=P1 
+    IF ((KEY.EQ.4).OR.(T.GE.0.).OR.(.NOT.C)) W=P1
     GB=W-33.
-38  WRITE (7,110) TT,GB,K,(GBIG(I),I=1,4) 
+38  WRITE (7,110) TT,GB,K,(GBIG(I),I=1,4)
 110 FORMAT(3XF7.2,5X,F6.2,14X,I1,4(3X,F6.2))
     IF (.NOT.KTEST) GO TO 44
-    IF ((GBIG(K)+.0001).GE.0.) GO TO 44 
+    IF ((GBIG(K)+.0001).GE.0.) GO TO 44
     W=145.5300*(1.-(PBIGK/33.)**.1903)
     WRITE (7,115) W
 115 FORMAT (1H+,25X,F5.2)
@@ -196,38 +195,38 @@ PROGRAM DCIEM_MAIN
     X=PI
     DO 401 I=1,4
     Y=P(I)
-    GO TO 450 
+    GO TO 450
 401 CONTINUE
     GO TO 500
 402 IF (C) X=X+AK(1,K)*.5
     DO 403 I=1,4
-    Y=P(I)+AK(1,I)*.5 
+    Y=P(I)+AK(1,I)*.5
     GO TO 450
 403 CONTINUE
     GO TO 500
-404 IF (C) X=X+Z1*AK(1,K)+Z2*AK(2,K) 
-    DO 405 I=1,4 
+404 IF (C) X=X+Z1*AK(1,K)+Z2*AK(2,K)
+    DO 405 I=1,4
     Y=P(I)+Z1*AK(1,I)+Z2*AK(2,I)
     GO TO 450
 405 CONTINUE
     GO TO 500
 406 IF (C) X=X-Z3*AK(2,K)+Z4*AK(3,K)
-    DO 407 I=1,4 
-    Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I) 
+    DO 407 I=1,4
+    Y=P(I)-Z3*AK(2,I)+Z4*AK(3,I)
     GO TO 450
 407 CONTINUE
     GO TO 500
-408 DO 409 I=1,4 
+408 DO 409 I=1,4
 409 P(I)=P(I)+(AK(1,I)+Z5*AK(2,I)+Z6*AK(3,I)+AK(4,I))/6.
-    GO TO 22 
+    GO TO 22
 450 CONTINUE
-    F(I)=A*(X-Y)*(B+X+Y) 
+    F(I)=A*(X-Y)*(B+X+Y)
     X=Y
-    GO TO (401,403,405,407),J 
-500 DO 501 I=1,4 
+    GO TO (401,403,405,407),J
+500 DO 501 I=1,4
 501 AK(J,I)=(F(I)-F(I+1))*DT
     X=P1
     J= J + 1
-    GO TO (10,402,404,406,408),J 
+    GO TO (10,402,404,406,408),J
 
 END PROGRAM DCIEM_MAIN
