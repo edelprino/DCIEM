@@ -97,11 +97,10 @@ PROGRAM DCIEM_MAIN
 
 ! PART OF RUNGE-KUTTA ROUTINE
 
-22  DO I = 1,4
-        W = P(I)/R-42.9
-        GBIG(I) = W
-        IF (GBIG(K).LT.W) K = I
-    END DO
+22  DO 14 I = 1,4
+    W = P(I)/R-42.9
+    GBIG(I) = W
+14  IF (GBIG(K).LT.W) K = I
     PBIGK=GBIG(K)+ 33.
     TT = TT + DT
     TTEST = AMOD (TT,PTOUT)
