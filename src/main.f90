@@ -71,16 +71,16 @@ PROGRAM DCIEM_MAIN
 
 11  DT = DTL
     PLAST = P1
-    READ (3,104) T, GI
+    READ (3,104) T, G1
     IF (T.LT.0.) GO TO 12
     IF(NS2.EQ.2) T=T+TT
     NS2 = 1
     TL = T - .01
     IF (KEY.EQ.4) GO TO 59
     DP = .1+RDES
-    W2 = GI + 33. - DP
+    W2 = G1 + 33. - D1
 56  IF (P1.LT.W2) GO TO 58
-59  P1 = GI+33.
+59  P1 = G1 + 33.
     NS = 5
     GO TO 57
 58  DT=0.1
