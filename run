@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <dive_file>"
+    exit 1
+fi
+
+DIVE_NAME="./dives/$1/NLDIV.SRC"
+
+if [ ! -f "$DIVE_NAME" ]; then
+    echo "Error: File '$DIVE_NAME' not found"
+    exit 1
+fi
+
+cp "$DIVE_NAME" NLDIV.SRC
+make compile
+rm -f NLDIV.LST
+./a.out
+cat NLDIV.LST
+
+
