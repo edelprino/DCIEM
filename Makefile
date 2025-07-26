@@ -1,3 +1,5 @@
+.PHONY: compile run
+
 compile:
 	@gfortran -ffree-form -std=legacy src/main.f
 
