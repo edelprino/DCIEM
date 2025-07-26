@@ -147,7 +147,7 @@ PROGRAM DCIEM_MAIN
     NS=4
     NS3=NS
     P1 = PBIGK
-    GO TO 30
+    GO TO 10
 17  P1 = PBIGK
     GO TO 10
 
