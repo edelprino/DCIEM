@@ -1,0 +1,15 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -t dciem .
+      - name: Test
+        run: docker run --rm dciem make test
