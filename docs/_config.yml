@@ -1,0 +1,11 @@
+title: DCIEM Decompression Model (1973)
+description: Fortran IV transcription of the 1973 DCIEM digital decompression programs
+remote_theme: just-the-docs/just-the-docs
+
+url: ""
+baseurl: "/DCIEM"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - "Digital computation of decompression profiles.pdf"

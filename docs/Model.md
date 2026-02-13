@@ -1,3 +1,8 @@
+---
+title: Technical Reference
+nav_order: 2
+---
+
 # DCIEM Decompression Model — Technical Reference
 
 This document consolidates all information from the 1973 DCIEM Report No. 884,
