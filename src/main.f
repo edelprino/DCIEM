@@ -77,11 +77,20 @@ PROGRAM DCIEM_MAIN
     NS2 = 1
     TL = T - .01
     IF (KEY.EQ.4) GO TO 59
+    IF ((G1+33.).LT.P1) THEN
+       T=T+TT
+       TL=T-.01
+    END IF
     DP = .1 * RDES
     W2 = G1 + 33. - DP
 56  IF (P1.LT.W2) GO TO 58
+    IF (P1.GT.(G1+33.+.1*RASC)) GO TO 55
 59  P1 = G1 + 33.
     NS = 5
+    GO TO 57
+55  DT=0.1
+    NS=1
+    P1 = P1 - .1*RASC
     GO TO 57
 58  DT=0.1
     NS=1
@@ -147,7 +156,7 @@ PROGRAM DCIEM_MAIN
     NS=4
     NS3=NS
     P1 = PBIGK
-    GO TO 10
+    GO TO 30
 17  P1 = PBIGK
     GO TO 10
 

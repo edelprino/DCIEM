@@ -13,7 +13,7 @@ if [ ! -f "$DIVE_NAME" ]; then
 fi
 
 cp "$DIVE_NAME" NLDIV.SRC
-make compile
+make --no-print-directory compile
 rm -f NLDIV.LST
 ./a.out
 cat NLDIV.LST

@@ -2,7 +2,7 @@
 
 This repository contains a faithful transcription of the DCIEM (Defence and Civil Institute of Environmental Medicine) decompression model programs described in the 1973 report “Digital Computation of Decompression Profiles” (Nishi & Kuehn). The original source was available only as scanned images inside a PDF; the goal of this project is to recover a compilable and runnable version of the 1973 Fortran code.
 
-> ⚠️ Work in progress (WIP). Only the first example dive in dives/ reproduces the reference output. The other examples currently produce different results, which indicates that transcription mistakes still remain and need to be fixed. Contributions are welcome (see below).
+All example dives in `dives/` reproduce the reference output from the report. Contributions are welcome (see below).
 
 ## What’s here
 - `src/main.f` — Fortran source files transcribed from the 1973 document.
@@ -16,8 +16,9 @@ The code implements the Kidd–Stubbs decompression model using a 4-compartment 
 
 Because the PDF contains scanned images of line-printer listings, several minimal edits were required to compile with a modern Fortran compiler:
 
-1. **Removal of Hollerith constants.** Legacy Hollerith constants such as 5HNLDIV, 4H SRC, etc., are not supported today. They’ve been replaced with standard character strings (e.g., 'NLDIV', ' SRC') and corresponding I/O statements have been adjusted.
+1. **Removal of Hollerith constants.** Legacy Hollerith constants such as 5HNLDIV, 4H SRC, etc., are not supported today. They've been replaced with standard character strings (e.g., 'NLDIV', ' SRC') and corresponding I/O statements have been adjusted.
 2. **File I/O portability.** The original code references system-specific file macros/routines (e.g., PDP-9 file management calls visible in the listing). These are replaced with standard Fortran OPEN/READ/WRITE/CLOSE (and INQUIRE where needed). Paths and unit numbers are configurable; see comments in the source.
+3. **D6ST ascent handling.** The D6S listing in Appendix 1 only handles descent between input entries. To support the D6ST dive-table analysis example (Appendix 5), ascent between decompression stops using RASC has been added, along with duration-to-absolute-time conversion for stop entries.
 
 Apart from the items above, the intent is to keep the code as close as possible to the 1973 listing (labels, fixed form, flow, and numerical method).
 
