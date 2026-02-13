@@ -6,4 +6,4 @@ WORKDIR /app
 COPY . .
 RUN make compile
 
-ENTRYPOINT ["sh"]
+CMD ["sh"]
