@@ -47,53 +47,62 @@ The absolute pressures in the four compartments are expressed by four
 non-linear first-order differential equations describing gas dynamics in the
 "slip-flow" regime:
 
-    dPj/dt = {aj (Bj + Pj + Pj-1)(Pj-1 - Pj)
-             - aj+1(Bj+1 + Pj+1 + Pj)(Pj - Pj+1)} / Vj
+$$
+\frac{dP_j}{dt} = \frac{a_j (B_j + P_j + P_{j-1})(P_{j-1} - P_j) - a_{j+1}(B_{j+1} + P_{j+1} + P_j)(P_j - P_{j+1})}{V_j}
+$$
 
 where:
-- j = 1, 2, 3 or 4 (compartment number)
-- Pj, Vj are the absolute pressure and volume of the jth compartment
-- Pa is the ambient or driving pressure (input to the model)
-- aj, Bj are flow constants of the jth resistor
-- P0 = Pa (ambient pressure) and P5 = 0
+- $$j = 1, 2, 3$$ or $$4$$ (compartment number)
+- $$P_j$$, $$V_j$$ are the absolute pressure and volume of the $$j$$th compartment
+- $$P_a$$ is the ambient or driving pressure (input to the model)
+- $$a_j$$, $$B_j$$ are flow constants of the $$j$$th resistor
+- $$P_0 = P_a$$ (ambient pressure) and $$P_5 = 0$$
 
 ### 2.2 Flow Constants
 
-The constant `a` is defined by:
+The constant $$a$$ is defined by:
 
-    a = a0 (Nd^2L) / 4
+$$
+a = \frac{a_0 \, N d^2 L}{4}
+$$
 
 where:
-- N is the number of pores in the resistor material
-- L is the mean length of the porous sample in the direction of flow
-- d is the mean pore diameter (assuming circular cross-section)
-- eta is the viscosity of the gas
+- $$N$$ is the number of pores in the resistor material
+- $$L$$ is the mean length of the porous sample in the direction of flow
+- $$d$$ is the mean pore diameter (assuming circular cross-section)
+- $$\eta$$ is the viscosity of the gas
 
-The value of `a` may be determined by measuring the steady state gas flow
+The value of $$a$$ may be determined by measuring the steady state gas flow
 through the pneumatic resistor and by recourse to the following equation:
 
-    a = P_A / (T_A * delta_P (B_0 + delta_P + 2P_A))
+$$
+a = \frac{P_A}{T_A \cdot \Delta P \, (B_0 + \Delta P + 2 P_A)}
+$$
 
 where:
-- P_A is the atmospheric pressure
-- T_A is the time required for 1 cm^3 of gas to flow through the resistor
-- delta_P is the "driving" pressure differential across the resistor
+- $$P_A$$ is the atmospheric pressure
+- $$T_A$$ is the time required for 1 cm³ of gas to flow through the resistor
+- $$\Delta P$$ is the "driving" pressure differential across the resistor
 
-The flow constant B is defined by:
+The flow constant $$B$$ is defined by:
 
-    B = B0 (T * sqrt(pi*M) / d)
+$$
+B = B_0 \frac{T \sqrt{\pi M}}{d}
+$$
 
 where:
-- T is the absolute temperature of the gas
-- M is the molecular weight of the gas
+- $$T$$ is the absolute temperature of the gas
+- $$M$$ is the molecular weight of the gas
 
 ### 2.3 Half-Times and Resistor Properties
 
-The half-time T_h of a resistor-volume combination is defined as the time
-required for the compartment pressure to decrease from a value of P_i to
-(P_i + P_f)/2. It can be expressed as:
+The half-time $$T_h$$ of a resistor-volume combination is defined as the time
+required for the compartment pressure to decrease from a value of $$P_i$$ to
+$$(P_i + P_f)/2$$. It can be expressed as:
 
-    T_h = V / (a(B+3P_f)) * ln[(2B + 3P_i + P_f) / (B + P_i - P_f)]
+$$
+T_h = \frac{V}{a(B + 3P_f)} \ln\!\left[\frac{2B + 3P_i + P_f}{B + P_i - P_f}\right]
+$$
 
 For this decompression model, the half-time is specified for a compartmental
 pressure decrease from 50 psig to 25 psig.
@@ -114,14 +123,16 @@ pressure decrease from 50 psig to 25 psig.
 The pressure-time relation for transient flow of gas through a
 resistor-volume combination is:
 
-    t = V / (a(B+3Pf)) * ln[(Pf - Pi)(B + Pi + Pf) / ((Pf - Pt)(B + Pt + Pf))]
+$$
+t = \frac{V}{a(B + 3P_f)} \ln\!\left[\frac{(P_f - P_i)(B + P_i + P_f)}{(P_f - P_t)(B + P_t + P_f)}\right]
+$$
 
 where:
-- a, B are flow constants of the resistor
-- V is the compartment volume
-- P_i is the initial compartment pressure at t = 0
-- P_t is the compartment pressure at time t
-- P_f is the final compartment pressure
+- $$a$$, $$B$$ are flow constants of the resistor
+- $$V$$ is the compartment volume
+- $$P_i$$ is the initial compartment pressure at $$t = 0$$
+- $$P_t$$ is the compartment pressure at time $$t$$
+- $$P_f$$ is the final compartment pressure
 
 ---
 
@@ -132,37 +143,47 @@ where:
 The differential equations are solved using a 4th-order Runge-Kutta method
 due to Gill (Reference 3), characterized by the first dependent variable:
 
-    y(n+1) = y(n) + (k1 + 2(1 - 1/sqrt(2))k2 + 2(1 + 1/sqrt(2))k3 + k4) / 6
+$$
+y_{n+1} = y_n + \frac{k_1 + 2\!\left(1 - \tfrac{1}{\sqrt{2}}\right)k_2 + 2\!\left(1 + \tfrac{1}{\sqrt{2}}\right)k_3 + k_4}{6}
+$$
 
-where h is the step size and:
+where $$h$$ is the step size and:
 
-    k1 = h * f(x_n, y_n)
-    k2 = h * f(x_n + h/2, y_n + k1/2)
-    k3 = h * f(x_n + h/2, y_n + (sqrt(2)-1)/2 * k1 + (1 - (sqrt(2)-1)/2) * k2)
-    k4 = h * f(x_n + h, y_n - k2/sqrt(2) + (1 + 1/sqrt(2)) * k3)
+$$
+\begin{aligned}
+k_1 &= h \, f(x_n,\; y_n) \\
+k_2 &= h \, f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{k_1}{2}\right) \\
+k_3 &= h \, f\!\left(x_n + \tfrac{h}{2},\; y_n + \tfrac{\sqrt{2}-1}{2}\,k_1 + \left(1 - \tfrac{\sqrt{2}-1}{2}\right)k_2\right) \\
+k_4 &= h \, f\!\left(x_n + h,\; y_n - \tfrac{k_2}{\sqrt{2}} + \left(1 + \tfrac{1}{\sqrt{2}}\right)k_3\right)
+\end{aligned}
+$$
 
 This method is applied to all four dependent variables (compartment pressures).
 
 ### 3.2 Runge-Kutta Constants
 
-The program uses pre-calculated constants derived from sqrt(2) = 1.414213562:
+The program uses pre-calculated constants derived from $$\sqrt{2} = 1.414213562$$:
 
-| Constant | Value         | Derivation                    |
-|----------|---------------|-------------------------------|
-| Z1       | 0.207106781   | (sqrt(2) - 1) / 2            |
-| Z2       | 0.292893219   | 1 - 1/sqrt(2) = 1 - Z3       |
-| Z3       | 0.707106781   | 1/sqrt(2)                     |
-| Z4       | 1.707106781   | 1 + 1/sqrt(2) = 1 + Z3        |
-| Z5       | 0.585786438   | 2 - sqrt(2)                   |
-| Z6       | 3.414213562   | 2 + sqrt(2)                   |
+| Constant | Value         | Derivation                                  |
+|----------|---------------|---------------------------------------------|
+| Z1       | 0.207106781   | $$(\sqrt{2} - 1) / 2$$                      |
+| Z2       | 0.292893219   | $$1 - 1/\sqrt{2} = 1 - Z_3$$               |
+| Z3       | 0.707106781   | $$1/\sqrt{2}$$                              |
+| Z4       | 1.707106781   | $$1 + 1/\sqrt{2} = 1 + Z_3$$               |
+| Z5       | 0.585786438   | $$2 - \sqrt{2}$$                            |
+| Z6       | 3.414213562   | $$2 + \sqrt{2}$$                            |
 
 The final update formula in the code is:
 
-    P(I) = P(I) + (AK(1,I) + Z5*AK(2,I) + Z6*AK(3,I) + AK(4,I)) / 6
+$$
+P(I) = P(I) + \frac{AK(1,I) + Z_5 \cdot AK(2,I) + Z_6 \cdot AK(3,I) + AK(4,I)}{6}
+$$
 
 The function evaluated at each stage is:
 
-    F(I) = A * (X - Y) * (B + X + Y)
+$$
+F(I) = A \cdot (X - Y) \cdot (B + X + Y)
+$$
 
 where X is the pressure of the upstream compartment (or ambient pressure for
 compartment 1) and Y is the pressure of the current compartment. This
@@ -174,18 +195,22 @@ After the four compartment pressures are calculated, the safe ascent depth
 for decompression is determined from the greatest of these pressures divided
 by a supersaturation ratio. The supersaturation ratio is defined by:
 
-    K_T = P_T / D_SA
+$$
+K_T = \frac{P_T}{D_{SA}}
+$$
 
 where:
-- P_T is the greatest absolute compartment pressure
-- D_SA is the pressure to which ascent may be made safely
+- $$P_T$$ is the greatest absolute compartment pressure
+- $$D_{SA}$$ is the pressure to which ascent may be made safely
 
 Experiments involving more than 4000 man-dives at DCIEM to depths as great
-as 300 ft of seawater have indicated that K_T can be expressed as:
+as 300 ft of seawater have indicated that $$K_T$$ can be expressed as:
 
-    K_T = 1.385(1 - 17.7/P_T)
+$$
+K_T = 1.385\!\left(1 - \frac{17.7}{P_T}\right)
+$$
 
-That is, K_T varies as a function of the absolute pressure. This is the
+That is, $$K_T$$ varies as a function of the absolute pressure. This is the
 "pressure-dependent supersaturation ratio."
 
 **Table 2 — Pressure-Dependent Supersaturation Ratio:**
@@ -204,23 +229,29 @@ That is, K_T varies as a function of the absolute pressure. This is the
 | 330         | 297               | 195.4        | 1.445|
 | 363         | 330               | 219.2        | 1.44 |
 
-The safe ascent depth in gauge pressure, D_SA, can be determined from:
+The safe ascent depth in gauge pressure, $$D_{SA}$$, can be determined from:
 
-    D_SA = P_T / K_T - P_A
+$$
+D_{SA} = \frac{P_T}{K_T} - P_A
+$$
 
-where P_A is the barometric pressure at the water surface. Expressed in feet
-of seawater (where P_A = 33 ft abs.):
+where $$P_A$$ is the barometric pressure at the water surface. Expressed in feet
+of seawater (where $$P_A = 33$$ ft abs.):
 
-    D_SA = P_T / 1.385 - 42.9
+$$
+D_{SA} = \frac{P_T}{1.385} - 42.9
+$$
 
 This is the formula used in the code as `GBIG(I) = P(I)/R - 42.9` where
-R = 1.385.
+$$R = 1.385$$.
 
 ### 3.4 Altitude Calculations
 
 For altitude calculations, the safe ascent altitude in thousands of feet is:
 
-    W = 145.53 * (1 - (PBIGK/33)^0.1903)
+$$
+W = 145.53 \left(1 - \left(\frac{PBIGK}{33}\right)^{0.1903}\right)
+$$
 
 This converts the safe ascent pressure to equivalent altitude above sea level,
 using the standard atmosphere pressure-altitude relationship.
