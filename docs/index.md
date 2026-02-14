@@ -151,7 +151,7 @@ pressure decrease from 50 psig to 25 psig.
 | Gas          | M    | T_h (minutes) | V (c.c.) | a (x10^-3) | B     |
 |--------------|------|---------------|-----------|------------|-------|
 | O2           | 32   | 22.4          | 28.9      | 4.575      | 130.2 |
-| 20/80 O2/N2  | 28.8 | 20.8          | 25.9      | 5.133      | 122.3 |
+| 20/80 O2/N2  | 28.8 | 20.8          | 28.9      | 5.133      | 122.3 |
 | N2           | 28   | 20.4          | 28.9      | 5.309      | 119.9 |
 | 20/80 O2/He  | 9.6  | 14.4          | 28.9      | 4.725      | 230.2 |
 | 10/90 O2/He  | 6.8  | 12.5          | 28.9      | 4.740      | 272.5 |
@@ -264,12 +264,16 @@ That is, $$K_T$$ varies as a function of the absolute pressure. This is the
 | 99          | 66                | 28.6         | 1.61 |
 | 132         | 99                | 52.4         | 1.55 |
 | 165         | 132               | 76.2         | 1.51 |
-| 198         | 165               | 100.1        | 1.49 |
+| 198         | 165               | 100.1        | 1.49*|
 | 231         | 198               | 123.9        | 1.47 |
 | 264         | 231               | 147.7        | 1.46 |
 | 297         | 264               | 171.5        | 1.45 |
 | 330         | 297               | 195.4        | 1.445|
 | 363         | 330               | 219.2        | 1.44 |
+
+\* The printed digit for $$K_T$$ at $$P_T = 198$$ is ambiguous in the original scan:
+it could be read as 1.40 or 1.49. We adopt **1.49** because the formula
+$$K_T = 1.385/(1-13.7/198)$$ yields 1.489, which rounds to 1.49.
 
 The safe ascent depth in gauge pressure, $$D_{SA}$$, can be determined from:
 
