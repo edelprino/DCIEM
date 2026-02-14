@@ -1,6 +1,6 @@
 title: DCIEM Decompression Model (1973)
 description: Fortran IV transcription of the 1973 DCIEM digital decompression programs
-remote_theme: just-the-docs/just-the-docs
+remote_theme: pages-themes/cayman@v0.2.0
 
 math: mathjax
 
