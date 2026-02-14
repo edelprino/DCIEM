@@ -63,7 +63,7 @@ where:
 The constant $$a$$ is defined by:
 
 $$
-a = \frac{a_0 \, N d^2 L}{4}
+a = a_0 \frac{N d^4}{L \eta}
 $$
 
 where:
@@ -87,12 +87,13 @@ where:
 The flow constant $$B$$ is defined by:
 
 $$
-B = B_0 \frac{T \sqrt{\pi M}}{d}
+B = B_0 \frac{\eta \sqrt{T / M}}{d}
 $$
 
 where:
 - $$T$$ is the absolute temperature of the gas
 - $$M$$ is the molecular weight of the gas
+- $$\eta$$ is the viscosity of the gas
 
 ### 2.3 Half-Times and Resistor Properties
 
@@ -101,7 +102,7 @@ required for the compartment pressure to decrease from a value of $$P_i$$ to
 $$(P_i + P_f)/2$$. It can be expressed as:
 
 $$
-T_h = \frac{V}{a(B + 3P_f)} \ln\!\left[\frac{2B + 3P_i + P_f}{B + P_i - P_f}\right]
+T_h = \frac{V}{a(B + 2P_f)} \ln\!\left[\frac{2B + 3P_f + P_i}{B + P_f + P_i}\right]
 $$
 
 For this decompression model, the half-time is specified for a compartmental
@@ -113,10 +114,14 @@ pressure decrease from 50 psig to 25 psig.
 | Gas          | M    | T_h (minutes) | V (c.c.) | a (x10^-3) | B     |
 |--------------|------|---------------|-----------|------------|-------|
 | O2           | 32   | 22.4          | 28.9      | 4.575      | 130.2 |
-| 20/80 O2/N2  | 28.4 | 20.8          | 25.9      | 5.133      | 122.3 |
+| 20/80 O2/N2  | 28.8 | 20.8          | 25.9      | 5.133      | 122.3 |
 | N2           | 28   | 20.4          | 28.9      | 5.309      | 119.9 |
-| 20/80 O2/He  | 9.6  | 14.4          | 28.9      | 8.725      | 230.2 |
+| 20/80 O2/He  | 9.6  | 14.4          | 28.9      | 4.725      | 230.2 |
 | 10/90 O2/He  | 6.8  | 12.5          | 28.9      | 4.740      | 272.5 |
+
+**Note:** The program examples (Appendices 3-5) use B = 274.5 for 10/90 O₂/He, which
+differs slightly from the Table 1 value of 272.5. Both values appear in the original
+report; 274.5 represents the calibration used for the computer model.
 
 ### 2.4 Pressure-Time Relation
 
@@ -124,7 +129,7 @@ The pressure-time relation for transient flow of gas through a
 resistor-volume combination is:
 
 $$
-t = \frac{V}{a(B + 3P_f)} \ln\!\left[\frac{(P_f - P_i)(B + P_i + P_f)}{(P_f - P_t)(B + P_t + P_f)}\right]
+t = \frac{V}{a(B + 2P_f)} \ln\!\left[\frac{(P_f - P_i)(B + P_f + P_t)}{(P_f - P_t)(B + P_f + P_i)}\right]
 $$
 
 where:
@@ -207,7 +212,7 @@ Experiments involving more than 4000 man-dives at DCIEM to depths as great
 as 300 ft of seawater have indicated that $$K_T$$ can be expressed as:
 
 $$
-K_T = 1.385\!\left(1 - \frac{17.7}{P_T}\right)
+K_T = \frac{1.385}{1 - \dfrac{13.7}{P_T}}
 $$
 
 That is, $$K_T$$ varies as a function of the absolute pressure. This is the
@@ -289,15 +294,15 @@ Each resistor-volume compartment can have different parameters.
 
 | Program  | Description                                          |
 |----------|------------------------------------------------------|
-| DIVER    | Real-time hyperbaric chamber monitoring. Source in Appendix 2. |
-| DIVER1   | Abbreviated DIVER output.                            |
-| DIVER2   | Like DIVER1 with DICTAPE output.                     |
+| DIVER    | Real-time hyperbaric chamber monitoring. In operation, chamber pressure is sampled every 10 seconds via an analogue-to-digital converter (ADF4TS). Output of elapsed time, chamber pressure, safe ascent depth, controlling compartment, and compartment pressures occurs every minute via teletype. If the chamber pressure drops below the predicted safe ascent depth, "VIOLATION" is printed as a warning. Sampling is terminated by typing CONTROL P. After the dive, theoretical calculations continue for 12 hours with printout at one-hour intervals. A conversational mode is used to start the program. Source in Appendix 2. |
+| DIVER1   | Abbreviated DIVER output: elapsed time, chamber pressure, safe ascent depth, and controlling compartment number only. |
+| DIVER2   | Like DIVER1 with DECTAPE output.                     |
 
 ### Other
 
 | Program  | Description                                          |
 |----------|------------------------------------------------------|
-| D6SAC2   | Modified D6SA for changes in atmospheric pressure. Uses B' = B + 2P_A and D_SA = T_DST/(0.574 * P_A), where P_A is barometric pressure. |
+| D6SAC2   | Modified D6SA for changes in atmospheric pressure. The computation is based on gauge pressure using a flow constant B' = B + 2P_A, where P_A is the barometric pressure. The safe ascent formula becomes D_SA = P_g / 1.385 − 0.578 P_A, where P_g is the gauge pressure of the controlling compartment (eq. 14 of the original report). P_A is inserted in the input file immediately after RASC. |
 | D6SMC    | Modified D6SA for up to nine identical compartments. Number of compartments entered as two-digit number after R in input. |
 | D6SAT    | Combination of D6SA and D6ST for series of standard dives at same depth but different times. |
 
@@ -317,7 +322,7 @@ The KEY integer (first field of the input file) selects the dive mode:
 | 04     | Impulse dive: step impulse of pressure at time zero, maintained for a duration, then instantly returned to sea level. Used for calibration of pneumatic decompression computers. |
 | 05     | Flying after diving: standard dive followed by altitude calculations for 18 hours (1080 minutes) with output every 15 minutes. |
 | 10, 20, 30... | Repetitive dive: standard dive, surface interval, then another dive. N = KEY/10 is the number of repetitions. Compartment pressures at end of each dive are initial conditions for the next. |
-| *5, 25, 35... | Repetitive dive followed by flying after diving: like repetitive dive, but after the last excursion the safe ascent altitude is calculated. |
+| 15, 25, 35... | Repetitive dive followed by flying after diving: like repetitive dive, but after the last excursion the safe ascent altitude is calculated. KEY = 10×N + 5, where N is the number of repetitive dives (e.g., KEY=15 means 1 repetitive dive then flying calculations; KEY=25 means 2 repetitive dives then flying calculations). |
 | 09     | Terminator: stops the program.                            |
 
 ### 5.2 Input File Format (NLDIV.SRC)
